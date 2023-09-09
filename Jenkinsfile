@@ -3,29 +3,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository
                 checkout scm
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build your Docker image
-                    sh 'docker build -t your-image-name:tag .'
+                    // Build Docker image
+                    sh 'docker build -t imagename:tag .'
                 }
             }
         }
 		stage('Unit Tests') {
 			steps {
 				// Run unit tests
-				sh 'npm test'  // Replace with your test command
+				sh 'npm test'  
 			}
 		}
 
 		stage('Integration Tests') {
 			steps {
 				// Run integration tests
-				sh 'npm run integration-test'  // Replace with your integration test command
+				sh 'npm run integration-test'  
 			}
 		}
 		stage('Deploy Infrastructure') {
@@ -34,13 +33,19 @@ pipeline {
 				sh 'terraform init && terraform apply -auto-approve'
 			}
 		}
-		stage('Configure Instances') {
-			steps {
-				// Run Ansible for configuration management
-				sh 'ansible-playbook -i inventory.ini playbook.yml'  // Replace with your Ansible playbook and inventory file
-			}
-		}
-
-
+		#stage('Configure Instances') {
+		#	steps {
+		#		// Run Ansible for configuration management
+		#		sh 'ansible-playbook nginx.yml'  
+		#	}
+		#}
     }
+   post {
+    failure {
+	    echo " build is failed"
+    }
+    success {
+       echo "build is success"
+    }
+} 
 }
