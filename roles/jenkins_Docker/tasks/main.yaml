@@ -1,0 +1,19 @@
+
+    - name: Create Jenkins Home Directory
+      file:
+        path: "{{ jenkins_home }}"
+        state: directory
+
+    - name: Start Jenkins Docker Container
+      docker_container:
+        name: "{{ jenkins_container_name }}"
+        image: jenkins/jenkins:lts
+        volumes:
+          - "{{ jenkins_home }}:/var/jenkins_home"
+        ports:
+          - "{{ jenkins_port }}:8080"
+          - "{{ apache2_port }}:80"
+          - "{{ nodejs_port }}:3000"
+        privileged: true
+        user: root
+        restart_policy: always

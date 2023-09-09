@@ -1,0 +1,5 @@
+ jenkins_container_name: jenkins_container
+ jenkins_port: 8080
+ jenkins_home: /home/ansible/jenkins_home
+ nodejs_port: 3000
+ apache2_port: 80

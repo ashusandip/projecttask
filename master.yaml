@@ -1,0 +1,7 @@
+---
+- name: Setup Jenkins Docker Container
+  hosts: jenkins
+  connection: ssh
+  become: yes
+  roles:
+    - jenkins_Docker 
