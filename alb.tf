@@ -18,10 +18,6 @@ resource "aws_lb_target_group" "application_tg_us" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc_us_east_1.id
   target_type = "instance"
-
-  health_check {
-    path = "/"
-  }
 }
 
 resource "aws_lb_listener" "application_listener_us" {
@@ -34,6 +30,38 @@ resource "aws_lb_listener" "application_listener_us" {
     type             = "forward"
   }
 }
+resource "aws_lb_target_group_health_check" "example" {
+  count                               = 1  # Set the number of health checks
+  target_group_arn                    = aws_lb_target_group.application_tg_us.arn
+  healthy_threshold                   = 2
+  unhealthy_threshold                 = 2
+  interval                            = 30
+  matcher                             = "200"
+  path                                = "/health"  # Your health check endpoint
+  timeout                             = 5
+}
+
+resource "aws_lb_listener_rule" "failover_rule" {
+  listener_arn = aws_lb_listener.application_lb_us.arn
+  priority     = 100
+
+  action {
+    type             = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = "200"
+      content      = "Failover"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["example.com"]
+    }
+  }
+}
+
+
                                                   
 ###### application load balancer us_west_2
 
