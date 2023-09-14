@@ -60,8 +60,9 @@ resource "aws_security_group_rule" "db_egress" {
 }
 resource "aws_db_instance" "replica" {
   provider = aws.us_west_2
- 
-  replicate_source_db = "project-db"
+  availability_zone = "us-west-2a"
+  source_db_instance_identifier = aws_db_instance.project-db.id
+  #replicate_source_db = "project-db"
   instance_class      = "db.t2.micro"
   publicly_accessible = true
   skip_final_snapshot = true
