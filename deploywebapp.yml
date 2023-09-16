@@ -1,0 +1,15 @@
+---
+- name: Deploy Web Application
+  hosts: web_instances
+  become: yes
+  tasks:
+    - name: Clone Application Repository
+      git:
+        repo: https://github.com/your/repo.git
+        dest: /var/www/html/app
+        version: master
+
+    - name: Copy Application Configuration
+      copy:
+        src: app-config.conf
+        dest: /var/www/html/app/config.conf
