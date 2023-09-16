@@ -1,0 +1,22 @@
+---
+- name: Configure Nginx for Web Application
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create Nginx Server Block
+      template:
+        src: nginx-app.conf.j2
+        dest: /etc/nginx/sites-available/app.conf
+      notify: Reload Nginx
+
+    - name: Enable Nginx Server Block
+      file:
+        src: /etc/nginx/sites-available/app.conf
+        dest: /etc/nginx/sites-enabled/app.conf
+        state: link
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
