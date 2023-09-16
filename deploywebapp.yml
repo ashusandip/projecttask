@@ -1,6 +1,6 @@
 ---
 - name: Deploy Web Application
-  hosts: web_instances
+  hosts: all
   become: yes
   tasks:
     - name: Clone Application Repository
